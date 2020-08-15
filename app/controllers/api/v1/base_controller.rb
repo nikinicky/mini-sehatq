@@ -2,12 +2,14 @@ module Api
   module V1
     class BaseController < ApplicationController
       before_action { request.format = :json }
-      # before_action :authenticate_user
+      before_action :authenticate_user
 
       def authenticate_user
         user_token = UserToken.find_by(token: request.headers['User-Access-Token'])
 
-        return false unless user_token.present?
+        unless user_token.present?
+          render json: {message: 'Unauthorized'}, status: :unauthorized and return
+        end
 
         if user_token.expires_in > Time.now.to_i
           @current_user = user_token.user
