@@ -9,6 +9,8 @@ module Api
         if status != :created
           render json: {message: generate_message(@user)}, status: :unprocessable_entity
         end
+
+        _, @user_token = UserTokens::Services::Create.run(@user)
       end
 
       private
