@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_14_194558) do
+ActiveRecord::Schema.define(version: 2020_08_15_091447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "hospital_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, default: "2020-08-15 09:15:12", null: false
+    t.datetime "updated_at", precision: 6, default: "2020-08-15 09:15:12", null: false
+  end
+
+  create_table "hospitals", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "district", null: false
+    t.string "address"
+    t.string "open_hours"
+    t.boolean "support_emergency", default: false
+    t.bigint "hospital_type_id"
+    t.datetime "created_at", precision: 6, default: "2020-08-15 09:02:13", null: false
+    t.datetime "updated_at", precision: 6, default: "2020-08-15 09:02:13", null: false
+    t.index ["hospital_type_id"], name: "index_hospitals_on_hospital_type_id"
+  end
 
   create_table "user_tokens", force: :cascade do |t|
     t.string "token", null: false

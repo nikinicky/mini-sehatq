@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       post 'register', to: 'users#create', as: 'create_user'
       post 'login', to: 'sessions#login'
       post 'logout', to: 'sessions#logout'
+
+      resources :hospitals, only: [:index]
     end
   end
 end
