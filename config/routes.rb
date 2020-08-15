@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       post 'logout', to: 'sessions#logout'
 
       resources :hospitals, only: [:index]
+      resources :doctors, only: [:index]
     end
   end
 end
