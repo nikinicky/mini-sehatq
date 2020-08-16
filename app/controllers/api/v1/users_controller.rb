@@ -17,7 +17,8 @@ module Api
       private
 
       def user_params
-        params.permit(:full_name, :email, :password)
+        params[:gender] = params[:gender].downcase
+        params.permit(:full_name, :email, :password, :gender, :birthday, :is_doctor)
       end
 
       def generate_message(user)
