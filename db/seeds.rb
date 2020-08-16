@@ -1,7 +1,7 @@
 # Populate hospital types
 hospital_types = ['Rumah Sakit', 'Klinik', 'Klinik Gigi', 'Klinik Kulit & Kecantikan']
 hospital_types.each do |name|
-  HospitalType.first_or_create(name: name)
+  HospitalType.where(name: name).first_or_create!
 end
 
 # Populate doctor specialities
@@ -14,7 +14,7 @@ specialities = [
   'Psikolog', 'Dokter Spesialis Saraf', 'Dokter Spesialis THT', 'Dokter Umum'
 ]
 specialities.each do |name|
-  DoctorSpeciality.first_or_create(name: name)
+  DoctorSpeciality.where(name: name).first_or_create!
 end
 
 # Populate hospitals
