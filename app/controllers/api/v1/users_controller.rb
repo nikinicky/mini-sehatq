@@ -17,7 +17,7 @@ module Api
       private
 
       def user_params
-        params[:gender] = params[:gender].downcase
+        params[:gender] = params[:gender].downcase if params[:gender].present?
         params.permit(:full_name, :email, :password, :gender, :birthday, :is_doctor)
       end
 
