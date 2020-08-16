@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_15_194909) do
+ActiveRecord::Schema.define(version: 2020_08_16_101753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "appointments", force: :cascade do |t|
+    t.integer "doctor_id"
+    t.integer "user_id"
+    t.integer "schedule_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["schedule_id"], name: "index_appointments_on_schedule_id"
+    t.index ["user_id"], name: "index_appointments_on_user_id"
+  end
 
   create_table "doctor_informations", force: :cascade do |t|
     t.string "description"
@@ -25,6 +36,18 @@ ActiveRecord::Schema.define(version: 2020_08_15_194909) do
     t.index ["doctor_id"], name: "index_doctor_informations_on_doctor_id"
   end
 
+  create_table "doctor_schedules", force: :cascade do |t|
+    t.integer "doctor_id"
+    t.integer "hospital_id"
+    t.date "date"
+    t.string "start_hour"
+    t.string "end_hour"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["doctor_id"], name: "index_doctor_schedules_on_doctor_id"
+    t.index ["hospital_id"], name: "index_doctor_schedules_on_hospital_id"
+  end
+
   create_table "doctor_specialities", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -33,8 +56,8 @@ ActiveRecord::Schema.define(version: 2020_08_15_194909) do
 
   create_table "hospital_types", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, default: "2020-08-15 20:10:41", null: false
-    t.datetime "updated_at", precision: 6, default: "2020-08-15 20:10:41", null: false
+    t.datetime "created_at", precision: 6, default: "2020-08-15 09:15:12", null: false
+    t.datetime "updated_at", precision: 6, default: "2020-08-15 09:15:12", null: false
   end
 
   create_table "hospitals", force: :cascade do |t|
@@ -47,6 +70,16 @@ ActiveRecord::Schema.define(version: 2020_08_15_194909) do
     t.datetime "created_at", precision: 6, default: "2020-08-15 09:02:13", null: false
     t.datetime "updated_at", precision: 6, default: "2020-08-15 09:02:13", null: false
     t.index ["hospital_type_id"], name: "index_hospitals_on_hospital_type_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string "code"
+    t.integer "appointment_id"
+    t.string "payment_type"
+    t.string "notes"
+    t.string "status", default: "pending"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "user_tokens", force: :cascade do |t|

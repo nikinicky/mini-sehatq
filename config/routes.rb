@@ -8,7 +8,18 @@ Rails.application.routes.draw do
       post 'logout', to: 'sessions#logout'
 
       resources :hospitals, only: [:index]
-      resources :doctors, only: [:index]
+
+      resources :orders, only: [:create] do
+        member do
+          post 'checkout', to: 'orders#checkout'
+        end
+      end
+
+      resources :doctors, only: [:index] do
+        member do
+          get 'schedules', to: 'doctors#schedules'
+        end
+      end
     end
   end
 end
