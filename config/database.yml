@@ -20,4 +20,8 @@ test:
 
 production:
   <<: *default
-  database: mini_sehatq_test
+  host: ec2-50-17-90-177.compute-1.amazonaws.com
+  database: mini_sehatq_production
+  user: yovrqgxsosivcx
+  password: bd6e60d9e8f2d244d967dc320b89566e4c9012d17d63b7213f5951aaf09f7bad
+  port: 5432
