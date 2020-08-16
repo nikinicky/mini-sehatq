@@ -33,6 +33,10 @@ RSpec.describe 'Api::V1::SessionsController', type: :request do
             id: user.id,
             full_name: user.full_name,
             email: user.email,
+            birthday: user.birthday,
+            age: user.age,
+            gender: user.gender,
+            is_doctor: user.is_doctor,
             token: user.user_tokens.last.token
           }
         }.with_indifferent_access
