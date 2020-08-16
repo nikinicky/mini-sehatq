@@ -5,6 +5,9 @@ class Appointment < ApplicationRecord
 
   has_one :order
 
+  THRESHOLD_TIME = 30
+  THRESHOLD_USER_IN_A_DAY = 10
+
   def hospital
     doctor_schedule.hospital
   end

@@ -7,7 +7,11 @@ module Api
       def create
         status, @order = Orders::Services::Create.run(order_params)
 
-        if status != :created
+        if status == :cannot_book
+          render json: {message: "You can't book this schedule. Please looking for another schedule."}, status: :unprocessable_entity
+        elsif status == :unavailable
+          render json: {message: "You can't book this schedule. Please looking for another doctor."}, status: :unprocessable_entity
+        elsif status != :created
           render json: {message: "Something wrong! Can't create order."}, status: :unprocessable_entity
         end
       end
