@@ -59,7 +59,7 @@ RSpec.describe 'Users::Services::Create', type: :integration do
 
         expect(status).to eq(:failed)
         expect(user.errors.messages.present?).to eq(true)
-        expect(user.errors.full_messages).to eq(["Full name can't be blank"])
+        expect(user.errors.full_messages).to eq(["Full name can't be blank", "Full name is too short (minimum is 3 characters)"])
       end
     end
 

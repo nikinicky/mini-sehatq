@@ -24,4 +24,9 @@ class User < ApplicationRecord
   def schedules
     doctor_schedules if is_doctor
   end
+
+  def age
+    return nil if birthday.nil?
+    age = Date.today.year - birthday.year
+  end
 end
