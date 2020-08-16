@@ -4,6 +4,10 @@ module Orders
       def self.run(params)
         status, appointment = Appointments::Services::Create.run(params)
 
+        if status != :created
+          return status, nil
+        end
+
         order = Order.new(
           code: Utilities::GenerateCode.for_order,
           appointment: appointment,

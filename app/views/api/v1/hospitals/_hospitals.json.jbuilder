@@ -10,6 +10,6 @@ if show_schedules
     json.id schedule.id
     json.session_date schedule.format_session_date
     json.session_hour schedule.format_session_hour
-    json.booked false
+    json.booked Appointments::Services::Create.booked?(schedule.id)
   end
 end

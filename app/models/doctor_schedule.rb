@@ -1,7 +1,8 @@
 class DoctorSchedule < ApplicationRecord
   belongs_to :doctor, class_name: 'User', foreign_key: 'doctor_id'
   belongs_to :hospital
-  has_one :appointment
+
+  has_one :appointment, foreign_key: 'schedule_id'
 
   def format_session_hour
     format_start_hour + ' - ' + format_end_hour
@@ -12,7 +13,7 @@ class DoctorSchedule < ApplicationRecord
     minute = start_hour.split(':').second
 
     session_start = date.to_time.change(hour: hour, min: minute)
-    return I18n.l(session_start, format: '%I:%M')
+    return I18n.l(session_start, format: '%H:%M')
   end
 
   def format_end_hour
@@ -20,7 +21,7 @@ class DoctorSchedule < ApplicationRecord
     minute = end_hour.split(':').second
 
     session_end = date.to_time.change(hour: hour, min: minute)
-    return I18n.l(session_end, format: '%I:%M')
+    return I18n.l(session_end, format: '%H:%M')
   end
 
   def format_session_date
