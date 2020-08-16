@@ -73,7 +73,7 @@ RSpec.describe 'Api::V1::DoctorsController', type: :request do
       end
 
       it 'should return schedule list' do
-        expectation = {doctors: []}.with_indifferent_access
+        expectation = {}.with_indifferent_access
         doctor = @doctor
 
         object = {
@@ -92,25 +92,87 @@ RSpec.describe 'Api::V1::DoctorsController', type: :request do
             open_hours: hospital.open_hours,
             support_emergency: hospital.support_emergency,
             hospital_type: hospital.type_name,
-            schedules: {}
+            schedules: []
           }.with_indifferent_access
 
           doctor.schedules.each do |schedule|
-            string_date = schedule.date.strftime('%Y-%m-%d')
-            if hospital_object[:schedules]["#{string_date}"].present?
-              hospital_object[:schedules]["#{string_date}"][:session_hour] << schedule.format_session_hour
-            else
-              hospital_object[:schedules]["#{string_date}"] = {
-                session_date: schedule.format_session_date,
-                session_hour: [schedule.format_session_hour]
-              }
-            end
+            hospital_object[:schedules] << {
+              id: schedule.id,
+              session_date: schedule.format_session_date,
+              session_hour: schedule.format_session_hour,
+              booked: Appointments::Services::Create.booked?(schedule.id)
+            }.with_indifferent_access
           end
 
           object[:hospitals] << hospital_object
-          expectation[:doctors] << object
+          expectation = object
         end
 
+        expect(JSON.parse(response.body)).to eq(expectation)
+      end
+    end
+  end
+
+  describe 'GET #appointments' do
+    context 'doctor has some appointments' do
+      it 'should return appointment list' do
+        user = create(:user)
+        user_2 = create(:user)
+        doctor = create(:doctor)
+        hospital = doctor.doctor_information.hospitals.first
+
+        session_date = (Time.now + 10.days).strftime('%Y-%m-%d')
+        session_hours = [
+          {start_hour: '8:00', end_hour: '8:30'},
+          {start_hour: '8:45', end_hour: '9:15'},
+          {start_hour: '9:30', end_hour: '10:00'}
+        ]
+
+        session_hours.each do |session|
+          create(
+            :doctor_schedule, 
+            date: session_date, 
+            start_hour: session[:start_hour], 
+            end_hour: session[:end_hour], 
+            doctor: doctor, 
+            hospital: doctor.doctor_information.hospitals.first
+          )
+        end
+
+        schedules = DoctorSchedule.where(doctor_id: doctor.id, date: session_date)
+
+        appointment_1 = create(:appointment, doctor: doctor, user: user, schedule_id: schedules.first.id)
+        create(:order, status: Order::PAID, code: Utilities::GenerateCode.for_order, appointment: appointment_1)
+        appointment_2 = create(:appointment, doctor: doctor, user: user_2, schedule_id: schedules.last.id)
+        create(:order, status: Order::PAID, code: Utilities::GenerateCode.for_order, appointment: appointment_2)
+
+        expectation = {
+          appointments: [
+            {
+              hospital: appointment_1.doctor_schedule.hospital.name,
+              district: appointment_1.doctor_schedule.hospital.district,
+              date: appointment_1.doctor_schedule.format_session_date,
+              time: appointment_1.doctor_schedule.format_session_hour,
+              patient: appointment_1.user.full_name,
+              gender: appointment_1.user.gender,
+              age: appointment_1.user.age
+            },
+            {
+              hospital: appointment_2.doctor_schedule.hospital.name,
+              district: appointment_2.doctor_schedule.hospital.district,
+              date: appointment_2.doctor_schedule.format_session_date,
+              time: appointment_2.doctor_schedule.format_session_hour,
+              patient: appointment_2.user.full_name,
+              gender: appointment_2.user.gender,
+              age: appointment_2.user.age
+            }
+          ]
+        }.with_indifferent_access
+
+        params = {date: session_date}
+        get appointments_api_v1_doctor_path(doctor), params: params
+
+        expect(response.status).to eq(200)
         expect(JSON.parse(response.body)).to eq(expectation)
       end
     end

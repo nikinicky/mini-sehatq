@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :doctors, only: [:index] do
         member do
           get 'schedules', to: 'doctors#schedules'
+          get 'appointments', to: 'doctors#appointments'
         end
       end
     end
