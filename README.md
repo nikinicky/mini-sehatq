@@ -2,6 +2,9 @@
 - Ruby 2.7.1
 - Rails 6.0.3
 
+## Unit Test (Rspec)
+There is 38 examples in this application. Run the test with `rspec spec/`.
+
 ## Application
 I deployed this assignment application to heroku server. You can find it at https://mini-sehatq.herokuapp.com. 
 Opps, I didn't set a root path yet. So you will see an error page there. I will explain about available API endpoint in section below.
