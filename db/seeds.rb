@@ -18,15 +18,19 @@ specialities.each do |name|
 end
 
 # Populate hospitals
+rumah_sakit = HospitalType.find_by(name: 'Rumah Sakit')
+klinik_gigi = HospitalType.find_by(name: 'Klinik Gigi')
+klinik_kecantikan = HospitalType.find_by(name: 'Klinik Kulit & Kecantikan')
+
 hospitals = [
-  OpenStruct.new(name: 'Youth Beauty Clinic', district: 'Mampang Prapatan, Jakarta Selatan', open_hours: 'Senin - Sabtu 10:00 - 17:00', support_emergency: false, hospital_type_id: 4),
-  OpenStruct.new(name: 'RS Yadika Kebayoran Lama', district: 'Kebayoran Lama, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: 1),
-  OpenStruct.new(name: 'Klinik Gigi With Smile', district: 'Kebayoran Baru, Jakarta Selatan', open_hours: 'Senin - Minggu 10:00 - 21:00', support_emergency: false, hospital_type_id: 3),
-  OpenStruct.new(name: 'RS Tebet', district: 'Tebet, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: 1),
-  OpenStruct.new(name: 'RS Setia Mitra', district: 'Cilandak, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: 1),
-  OpenStruct.new(name: 'Siloam Hospitals Asri', district: 'Pancoran, Jakarta Selatan', open_hours: 'Senin - Sabtu 08:00 - 20:00', support_emergency: true, hospital_type_id: 1),
-  OpenStruct.new(name: 'RS Pondok Indah (RSPI) - Pondok Indah', district: 'Kebayoran Lama, Jakarta Selatan', open_hours: 'Senin - Sabtu 08:00 - 20:00', support_emergency: true, hospital_type_id: 1),
-  OpenStruct.new(name: 'RS Pusat Pertamina', district: 'Kebayoran Baru, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: 1)
+  OpenStruct.new(name: 'Youth Beauty Clinic', district: 'Mampang Prapatan, Jakarta Selatan', open_hours: 'Senin - Sabtu 10:00 - 17:00', support_emergency: false, hospital_type_id: klinik_kecantikan.id),
+  OpenStruct.new(name: 'RS Yadika Kebayoran Lama', district: 'Kebayoran Lama, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: rumah_sakit.id),
+  OpenStruct.new(name: 'Klinik Gigi With Smile', district: 'Kebayoran Baru, Jakarta Selatan', open_hours: 'Senin - Minggu 10:00 - 21:00', support_emergency: false, hospital_type_id: klinik_gigi.id),
+  OpenStruct.new(name: 'RS Tebet', district: 'Tebet, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: rumah_sakit.id),
+  OpenStruct.new(name: 'RS Setia Mitra', district: 'Cilandak, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: rumah_sakit.id),
+  OpenStruct.new(name: 'Siloam Hospitals Asri', district: 'Pancoran, Jakarta Selatan', open_hours: 'Senin - Sabtu 08:00 - 20:00', support_emergency: true, hospital_type_id: rumah_sakit.id),
+  OpenStruct.new(name: 'RS Pondok Indah (RSPI) - Pondok Indah', district: 'Kebayoran Lama, Jakarta Selatan', open_hours: 'Senin - Sabtu 08:00 - 20:00', support_emergency: true, hospital_type_id: rumah_sakit.id),
+  OpenStruct.new(name: 'RS Pusat Pertamina', district: 'Kebayoran Baru, Jakarta Selatan', open_hours: 'Senin - Minggu 00:00 - 23:59', support_emergency: true, hospital_type_id: rumah_sakit.id)
 ]
 hospitals.each do |hospital|
   Hospital.where(name: hospital.name).first_or_create!(
