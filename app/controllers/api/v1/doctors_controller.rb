@@ -15,6 +15,11 @@ module Api
       end
 
       def schedules
+        if @doctor.nil?
+          render json: {
+            message: "No doctor found."
+          }, status: :ok
+        end
       end
 
       def appointments
